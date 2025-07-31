@@ -1,5 +1,4 @@
 # devops-infra
-<<<<<<< HEAD
 Checkpoint Exem DevOps Infrastructure
 
 1. Creating a S3 Bucket to host my Terraform State:
@@ -35,6 +34,4 @@ When working on this project I have dealt with a few errors
     As it turns out, an organization-wide policy was applied on the cloud preventing me from preforming this action.
 
 2. 4 subnets that can't get destroyed
-=======
-Checkpoint Exam DevOps Infrastructure
->>>>>>> dcfeb541e63f90153f1d91ca5754777cad6bcb75
+

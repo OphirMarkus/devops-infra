@@ -25,7 +25,7 @@ variable "public_subnets" {
 
 variable "tags" {
   type = object({
-    project        = string
+    project = string
   })
   default = {
     project = "ophirs-counter-service"
