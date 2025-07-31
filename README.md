@@ -1,2 +1,2 @@
 # devops-infra
-Checkpoint Exem DevOps Infrastructure
+Checkpoint Exam DevOps Infrastructure
