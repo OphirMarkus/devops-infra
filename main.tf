@@ -57,7 +57,8 @@ module "eks" {
 data "aws_caller_identity" "current" {}
 
 data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_name
+  name       = module.eks.cluster_name
+  depends_on = [module.eks]
 }
 
 data "aws_eks_cluster_auth" "cluster" {
@@ -68,11 +69,11 @@ locals {
   ecr_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/counter-service:latest"
 }
 
-provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-}
+# provider "kubernetes" {
+#   host                   = module.eks.cluster_endpoint
+#   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+#   token                  = data.aws_eks_cluster_auth.cluster.token
+# }
 
 resource "kubernetes_deployment" "ophirs_counter_service_new" {
   metadata {
@@ -101,7 +102,7 @@ resource "kubernetes_deployment" "ophirs_counter_service_new" {
           name  = var.cluster_name
 
           port {
-            container_port = 80
+            container_port = var.port
           }
         }
       }
@@ -120,76 +121,77 @@ resource "kubernetes_service" "ophirs_counter_service" {
     }
 
     port {
-      port        = 80
-      target_port = 80
+      port        = var.port
+      target_port = var.port
+      node_port   = 30080
       protocol    = "TCP"
     }
 
-    type = "ClusterIP"
+    type = "NodePort"
   }
 }
 
-provider "helm" {
-  kubernetes = {
-    host                   = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
-  }
-}
+# provider "helm" {
+#   kubernetes = {
+#     host                   = module.eks.cluster_endpoint
+#     cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+#     token                  = data.aws_eks_cluster_auth.cluster.token
+#   }
+# }
 
 # Install ALB Controller via Helm
-resource "helm_release" "aws_load_balancer_controller" {
-  name       = "aws-load-balancer-controller"
-  namespace  = "default"
-  repository = "https://aws.github.io/eks-charts"
-  chart      = "aws-load-balancer-controller"
-  version    = "1.7.1"
+# resource "helm_release" "aws_load_balancer_controller" {
+#   name       = "aws-load-balancer-controller"
+#   namespace  = "default"
+#   repository = "https://aws.github.io/eks-charts"
+#   chart      = "aws-load-balancer-controller"
+#   version    = "1.7.1"
 
-  values = [yamlencode({
-    clusterName = var.cluster_name
-    region      = var.region
-    vpcId       = module.vpc.vpc_id
-    serviceAccount = {
-      create = false
-      name   = kubernetes_service_account.alb_controller.metadata[0].name
-    }
-    ingressClass = "alb"
-  })]
+#   values = [yamlencode({
+#     clusterName = var.cluster_name
+#     region      = var.region
+#     vpcId       = module.vpc.vpc_id
+#     serviceAccount = {
+#       create = false
+#       name   = kubernetes_service_account.alb_controller.metadata[0].name
+#     }
+#     ingressClass = "alb"
+#   })]
 
-  depends_on = [
-    kubernetes_service_account.alb_controller
-  ]
-}
+#   depends_on = [
+#     kubernetes_service_account.alb_controller
+#   ]
+# }
 
-resource "kubernetes_ingress_v1" "ophirs_ingress" {
-  metadata {
-    name      = var.cluster_name
-    namespace = "default"
-    annotations = {
-      "kubernetes.io/ingress.class"            = "alb"
-      "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
-      "alb.ingress.kubernetes.io/target-type"  = "ip"
-      "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTP\": 80}]"
-    }
-  }
+# resource "kubernetes_ingress_v1" "ophirs_ingress" {
+#   metadata {
+#     name      = var.cluster_name
+#     namespace = "default"
+#     annotations = {
+#       "kubernetes.io/ingress.class"            = "alb"
+#       "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
+#       "alb.ingress.kubernetes.io/target-type"  = "ip"
+#       "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTP\": 80}]"
+#     }
+#   }
 
-  spec {
-    rule {
-      http {
-        path {
-          path      = "/*"
-          path_type = "ImplementationSpecific"
+#   spec {
+#     rule {
+#       http {
+#         path {
+#           path      = "/*"
+#           path_type = "ImplementationSpecific"
 
-          backend {
-            service {
-              name = var.cluster_name
-              port {
-                number = 80
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
+#           backend {
+#             service {
+#               name = var.cluster_name
+#               port {
+#                 number = 80
+#               }
+#             }
+#           }
+#         }
+#       }
+#     }
+#   }
+# }

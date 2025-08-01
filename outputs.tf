@@ -14,3 +14,7 @@ output "node_sg_id" {
 #   value       = "https://${kubernetes_service.ophirs_counter_service.status.0.load_balancer.0.ingress.0.hostname}"
 #   description = "The external URL of the LoadBalancer service"
 # }
+
+output "k8s_metadata" {
+  value = kubernetes_ingress_v1.ophirs_ingress.metadata
+}
