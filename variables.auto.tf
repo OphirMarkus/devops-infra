@@ -5,12 +5,17 @@ variable "region" {
 
 variable "cluster_name" {
   type    = string
-  default = "ophirs-counter-service"
+  default = "ophirs-exam"
+}
+
+variable "port" {
+  type = number
+  default = 80
 }
 
 variable "instance_types" {
   type    = list(string)
-  default = ["t3.medium"]
+  default = ["t3.small"]
 }
 
 variable "private_subnets" {
@@ -28,6 +33,6 @@ variable "tags" {
     project = string
   })
   default = {
-    project = "ophirs-counter-service"
+    project = "ophirs-counter-service-new"
   }
 }

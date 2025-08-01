@@ -3,16 +3,30 @@ Checkpoint Exem DevOps Infrastructure
 
 1. Creating a S3 Bucket to host my Terraform State:
     - I have used a Terraform file to set up my bucket and dynamodb table and applied it once to create my resources.
+    - The file is commented out because it should run once to create the backend and not deleted. Uncomment the file to create a new backend if deleted.
     - with the Backend block, I can reference this S3 Bucket and set it as my state remote location.
 
 2. Creating my tf files:
-    - I set up the providers, main, variables.auto and providers tf files
-        - Providers.tf:  Required providers and Backend blocks.
-        - variables.auto.tf: Contains Variables used in main.tf.
-        - Main.tf: VPC and EKS cluster creation steps.
+    - I set up the tf files that would create everything on the AWS cloud
+        - providers.tf:  Required providers and Backend blocks.
+        - variables.auto.tf: Contains Variables used in any other file.
+        - main.tf: VPC and EKS cluster and k8s deployment creation steps.
+        - iam.tf: configs IAM policies and rules.
+        - alb.tf: configs ALB Controller and ingress.
         - outputs.tf: Output variables of the application of the configuration.
 
-# Errors
+    I have commented out iam and alb and put them back into main in hopes things would work again but it seems I have errors that are deep in the cloud so it didn't really help
+
+3. GitHub Actions:
+    - I wrote a GitHub Actions pipeline that acts on push to the main and CI/CD branches
+        - Configures AWS credentials
+        - Installs Terraform
+        - Initiates Terraform
+        - Checks for formatting 
+        - Shows changes to be made
+        - If the push is to branch "main": apply then destroy (destroy for cleanup purposes)
+
+# Major Errors
 When working on this project I have dealt with a few errors
 
 1. EKS cluster creation: Access Denied
@@ -33,5 +47,28 @@ When working on this project I have dealt with a few errors
 
     As it turns out, an organization-wide policy was applied on the cloud preventing me from preforming this action.
 
-2. 4 subnets that can't get destroyed
 
+2. can't get access to K8S app
+    After creating all network objects needed to access my app. I have discovered that the IAM rule that i was trying to create to allow access to port 80 from the internet was not getting created.
+
+    I have tried countless ways including changing my architecture a few times but to no avail.
+    It seems to me i just can't create any rule that has ingress from the internet, this makes me think it is an organization wide policy that prevents me from doing so again.
+
+    --- Unsolved ---
+
+3. Can't fully destroy
+    An internet gateway is refusing to delete because it has mapped public addresses that im likely not authorized to delete. 
+    
+    --- Unsolved ---
+
+
+# My Thoughts
+I fully acknowledge the fact that this repository has errors that prevent it from being compiled, after destroying, ome errors and conflicts prevented the configuration from being applied again.
+Unfortunately, and althogh i would've really wanted to see everything up and running on the cloud, I wasn't able to fully deploy the application.
+The errors and problems I have encountered that had to do with an inability to create or delete reasources have consumed huge amounts of my time and got me to a point where my code is not how i would've wanted it to look like.
+I truly believe I did all I can to solve problems along the way and I have invested many hours in this project.
+
+With that said, I have really enjoyed the opportunity to do something like this, I have learned a lot even though things didn't work out for me most of the time.
+I was introduced to Terraform and IaC on the AWS in the most effective way, which I'm very happy about.
+
+I would say the whole thing took me 16 hours.
