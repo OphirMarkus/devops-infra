@@ -54,7 +54,7 @@ When working on this project I have dealt with a few errors
     I have tried countless ways including changing my architecture a few times but to no avail.
     It seems to me i just can't create any rule that has ingress from the internet, this makes me think it is an organization wide policy that prevents me from doing so again.
 
-    --- Unsolved ---
+    After talking to Boris, I tried creating the rule with a cidr of my IP address only, this worked and i could access my application
 
 3. Can't fully destroy
     An internet gateway is refusing to delete because it has mapped public addresses that im likely not authorized to delete. 
@@ -63,14 +63,13 @@ When working on this project I have dealt with a few errors
 
 
 # My Thoughts
-I fully acknowledge the fact that this repository has errors that prevent it from being compiled, after destroying, ome errors and conflicts prevented the configuration from being applied again.
-Unfortunately, and althogh i would've really wanted to see everything up and running on the cloud, I wasn't able to fully deploy the application.
 The errors and problems I have encountered that had to do with an inability to create or delete reasources have consumed huge amounts of my time and got me to a point where my code is not how i would've wanted it to look like.
-I truly believe I did all I can to solve problems along the way and I have invested many hours in this project.
+I have invested many hours in this project and after a lot of hard work I am happy with the end product.
 
-With that said, I have really enjoyed the opportunity to do something like this, I have learned a lot even though things didn't work out for me most of the time.
+I have really enjoyed the opportunity to do something like this, I have learned a lot even though things didn't work out for me a most of the time.
 I was introduced to Terraform and IaC on the AWS in the most effective way, which I'm very happy about.
 
+One thing I think is missing is more specific guidelines or instructions on what you can or can't do, many times I had problems with permissions that don't trigger an error, so debugging and investigating consumed a lot of my time.
+In addition to that I would recommend testing the user against an automation written previously to determine wheter or not the user still has sufficient permissions to complete the tasks in this exam.
 
-
-I would say the whole thing took me 16 hours.
+I would say the whole thing took me 20 hours.

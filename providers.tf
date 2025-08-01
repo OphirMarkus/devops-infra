@@ -8,6 +8,7 @@ terraform {
     }
   }
 
+  # Define state backend
   backend "s3" {
     bucket  = "ophirs-tf-state-bucket"
     key     = "tfstate/terraform.tfstate"

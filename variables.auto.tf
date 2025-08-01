@@ -33,6 +33,11 @@ variable "tags" {
     project = string
   })
   default = {
-    project = "ophirs-counter-service-new"
+    project = "ophirs-exam"
   }
+}
+
+variable "client_ip" {
+  type    = string
+  default = "77.124.216.170"
 }

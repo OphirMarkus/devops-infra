@@ -22,6 +22,7 @@ resource "helm_release" "aws_load_balancer_controller" {
   ]
 }
 
+# Create load balancing ingress
 resource "kubernetes_ingress_v1" "ophirs_ingress" {
   metadata {
     name      = var.cluster_name
@@ -56,12 +57,23 @@ resource "kubernetes_ingress_v1" "ophirs_ingress" {
   depends_on = [module.eks]
 }
 
+# data "kubernetes_ingress_v1" "ophirs_ingress" {
+#   metadata {
+#     name      = var.cluster_name
+#     namespace = "default"
+#   }
+# }
+
+data "aws_lb" "alb" {
+}
+
+# create a Security Group rule for http ingress
 resource "aws_security_group_rule" "allow_http_to_alb" {
   type              = "ingress"
   from_port         = var.port
   to_port           = var.port
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = "sg-09812daa830aab6e0"
+  cidr_blocks       = ["${var.client_ip}/32"]
+  security_group_id = tolist(data.aws_lb.alb.security_groups)[0]
   description       = "Allow HTTP inbound to ALB"
 }

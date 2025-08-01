@@ -6,15 +6,9 @@ output "vpc_id" {
   value = module.vpc.vpc_id
 }
 
-output "node_sg_id" {
-  value = module.eks.node_security_group_id
+output "URL" {
+  value = "http://${kubernetes_ingress_v1.ophirs_ingress.status[0].load_balancer[0].ingress[0].hostname}"
 }
-
-# output "service_url" {
-#   value       = "https://${kubernetes_service.ophirs_counter_service.status.0.load_balancer.0.ingress.0.hostname}"
-#   description = "The external URL of the LoadBalancer service"
-# }
-
-output "k8s_metadata" {
-  value = kubernetes_ingress_v1.ophirs_ingress.metadata
+output "ingress_sg" {
+  value = tolist(data.aws_lb.alb.security_groups)[0]
 }
