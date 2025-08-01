@@ -9,7 +9,7 @@ variable "cluster_name" {
 }
 
 variable "port" {
-  type = number
+  type    = number
   default = 80
 }
 

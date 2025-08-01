@@ -8,8 +8,8 @@ module "vpc" {
   private_subnets = var.private_subnets
   public_subnets  = var.public_subnets
 
-   public_subnet_tags = {
-    "kubernetes.io/role/elb" = "1"
+  public_subnet_tags = {
+    "kubernetes.io/role/elb"                    = "1"
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
   enable_nat_gateway = true
@@ -45,7 +45,7 @@ module "eks" {
       max_size     = 2
       min_size     = 1
 
-      instance_types = var.instance_types
+      instance_types  = var.instance_types
       capacity_type   = "SPOT"
       create_iam_role = true
     }
@@ -166,9 +166,9 @@ resource "kubernetes_ingress_v1" "ophirs_ingress" {
     name      = var.cluster_name
     namespace = "default"
     annotations = {
-      "kubernetes.io/ingress.class" = "alb"
-      "alb.ingress.kubernetes.io/scheme" = "internet-facing"
-      "alb.ingress.kubernetes.io/target-type" = "ip"
+      "kubernetes.io/ingress.class"            = "alb"
+      "alb.ingress.kubernetes.io/scheme"       = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"  = "ip"
       "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTP\": 80}]"
     }
   }
@@ -177,7 +177,7 @@ resource "kubernetes_ingress_v1" "ophirs_ingress" {
     rule {
       http {
         path {
-          path     = "/*"
+          path      = "/*"
           path_type = "ImplementationSpecific"
 
           backend {
