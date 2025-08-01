@@ -71,4 +71,6 @@ I truly believe I did all I can to solve problems along the way and I have inves
 With that said, I have really enjoyed the opportunity to do something like this, I have learned a lot even though things didn't work out for me most of the time.
 I was introduced to Terraform and IaC on the AWS in the most effective way, which I'm very happy about.
 
+
+
 I would say the whole thing took me 16 hours.
