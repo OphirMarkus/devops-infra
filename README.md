@@ -70,6 +70,6 @@ I have really enjoyed the opportunity to do something like this, I have learned 
 I was introduced to Terraform and IaC on the AWS in the most effective way, which I'm very happy about.
 
 One thing I think is missing is more specific guidelines or instructions on what you can or can't do, many times I had problems with permissions that don't trigger an error, so debugging and investigating consumed a lot of my time.
-In addition to that I would recommend testing the user against an automation written previously to determine wheter or not the user still has sufficient permissions to complete the tasks in this exam.
+In addition to that I would recommend testing the user against an automation written previously to determine whether or not the user still has sufficient permissions to complete the tasks in this exam.
 
 I would say the whole thing took me 20 hours.
